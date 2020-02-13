@@ -7,7 +7,15 @@ module.exports = {
     'plugin:node/recommended-script',
     'plugin:prettier/recommended'
   ],
-  overrides: [],
+  overrides: [
+    {
+      files: ['rollup.config.js'],
+      rules: {
+        'node/no-unpublished-import': 'off',
+        'node/no-unsupported-features/es-syntax': 'off'
+      }
+    }
+  ],
   parserOptions: {
     ecmaVersion: 2019,
     sourceType: 'module'
