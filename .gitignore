@@ -108,4 +108,10 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+### self-catering.crx
 
+dist/*
+!dist/.gitkeep
+
+lib/*
+!lib/.gitkeep
