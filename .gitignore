@@ -110,6 +110,7 @@ dist
 
 ### self-catering.crx
 
+!dist
 dist/*
 !dist/.gitkeep
 
