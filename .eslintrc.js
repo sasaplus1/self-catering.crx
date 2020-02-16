@@ -14,6 +14,17 @@ module.exports = {
         'node/no-unpublished-import': 'off',
         'node/no-unsupported-features/es-syntax': 'off'
       }
+    },
+    {
+      env: {
+        browser: true,
+        webextensions: true
+      },
+      files: ['src/**/*.js'],
+      rules: {
+        'node/no-unsupported-features/es-syntax': 'off',
+        'node/no-unsupported-features/node-builtins': 'off'
+      }
     }
   ],
   parserOptions: {
