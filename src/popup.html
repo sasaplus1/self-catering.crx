@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>self catering</title>
+    <link rel="stylesheet" href="popup.css">
+    <script id="js-template-item-html" type="text/plain">
+      <li class="template-item">
+        <button class="item-button" type="button" data-template-hash="{{ hash }}">
+          {{ name }}
+          <span class="item-sample" data-template-hash="{{ hash }}">
+            {{{ example }}}
+          </span>
+        </button>
+      </li>
+    </script>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <main class="main">
+      <ul id="js-template-list" class="template-list"></ul>
+    </main>
+  </body>
+</html>

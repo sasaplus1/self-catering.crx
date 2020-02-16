@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+body {
+  margin: 0;
+}
+
+.main {
+  margin: 16px;
+}
+
+.template-list {
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.template-item {
+  display: flex;
+  list-style-type: none;
+  margin-top: 16px;
+}
+
+.template-item:first-child {
+  margin-top: 0;
+}
+
+.buttons {
+}
+
+.inputs {
+}
