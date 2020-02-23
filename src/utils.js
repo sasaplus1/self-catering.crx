@@ -2,22 +2,14 @@ import mustache from 'mustache';
 
 import { name } from './manifest';
 
-export function clone(data) {
-  return JSON.parse(JSON.stringify(data));
-}
-
+/**
+ * @param {string} value
+ */
 export function copyToClipboard(value) {
   const textarea = document.createElement('textarea');
 
-  textarea.style = `
-    height: 1px;
-    left: -1px;
-    position: fixed;
-    top: 0;
-    width: 1px;
-  `;
-
   document.body.appendChild(textarea);
+
   textarea.value = value;
   textarea.select();
 
@@ -31,6 +23,21 @@ export function getConfig() {
       resolve(data[name]);
     });
   });
+}
+
+export function getDefaultTemplates() {
+  return [
+    {
+      name: 'copy title and URL',
+      template: '{{ title }}\n{{{ url }}}\n',
+      hash: 'default item 1'
+    },
+    {
+      name: 'copy as Markdown list',
+      template: '- [{{ title }}]({{{ url }}})\n',
+      hash: 'default item 2'
+    }
+  ];
 }
 
 /**
@@ -69,14 +76,21 @@ export function getSelectedTabs() {
   });
 }
 
+/**
+ * @param {string} template
+ * @param {Object} data
+ */
 export async function renderTemplate(template, data) {
   const view = data || (await getSelectedTabs());
 
   return mustache.render(`{{#view}}${template}{{/view}}`, { view });
 }
 
-export function setConfig(configs) {
+/**
+ * @param {Object} config
+ */
+export function setConfig(config) {
   return new Promise(function(resolve) {
-    chrome.storage.local.set({ [name]: configs }, resolve);
+    chrome.storage.local.set({ [name]: config }, resolve);
   });
 }
