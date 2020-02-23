@@ -112,9 +112,8 @@ dist
 
 .stylelintcache
 
-!dist
-dist/*
-!dist/.gitkeep
+crx/*
+!crx/.gitkeep
 
 lib/*
 !lib/.gitkeep
