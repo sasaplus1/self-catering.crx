@@ -3,9 +3,9 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 
 export default [
   {
-    input: './src/popup.js',
+    input: './src/background.js',
     output: {
-      file: './lib/popup.js',
+      file: './lib/background.js',
       format: 'iife',
       name: 'popup',
       sourcemap: true
