@@ -110,6 +110,8 @@ dist
 
 ### self-catering.crx
 
+.stylelintcache
+
 !dist
 dist/*
 !dist/.gitkeep
