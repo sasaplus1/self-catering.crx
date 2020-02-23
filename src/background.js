@@ -1,34 +1,30 @@
 import {
   copyToClipboard,
+  getDefaultTemplates,
   getConfig,
-  // getSelectedTabs,
   renderTemplate
-} from './logic';
+} from './utils';
 
-async function onInstalled() {
-  const store = Object.assign(
+async function getTemplates() {
+  const { templates } = Object.assign(
     {
-      templates: [
-        {
-          name: 'copy title and URL',
-          template: '{{ title }}\n{{{ url }}}\n',
-          hash: 'default item 1'
-        },
-        {
-          name: 'copy as Markdown list',
-          template: '- [{{ title }}]({{{ url }}})\n',
-          hash: 'default item 2'
-        }
-      ]
+      templates: getDefaultTemplates()
     },
     await getConfig()
   );
 
-  const { templates } = store;
+  return templates;
+}
 
+/**
+ * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
+ */
+async function onInstalled() {
   const contexts = ['page_action'];
 
-  for (let template of templates) {
+  const templates = await getTemplates();
+
+  for (const template of templates) {
     const { name: title, hash: id } = template;
 
     chrome.contextMenus.create({
@@ -39,6 +35,10 @@ async function onInstalled() {
   }
 }
 
+/**
+ * @param {Object} info
+ * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
+ */
 async function onClicked(info) {
   const { menuItemId: hash } = info;
 
@@ -46,25 +46,9 @@ async function onClicked(info) {
     return;
   }
 
-  const store = Object.assign(
-    {
-      templates: [
-        {
-          name: 'copy title and URL',
-          template: '{{ title }}\n{{{ url }}}\n',
-          hash: 'default item 1'
-        },
-        {
-          name: 'copy as Markdown list',
-          template: '- [{{ title }}]({{{ url }}})\n',
-          hash: 'default item 2'
-        }
-      ]
-    },
-    await getConfig()
-  );
+  const templates = await getTemplates();
 
-  const template = store.templates.find(template => template.hash === hash);
+  const template = templates.find(template => template.hash === hash);
 
   if (!template) {
     return;
@@ -75,5 +59,5 @@ async function onClicked(info) {
   copyToClipboard(await renderTemplate(html));
 }
 
-chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.contextMenus.onClicked.addListener(onClicked);
+chrome.runtime.onInstalled.addListener(onInstalled);
