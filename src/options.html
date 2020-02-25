@@ -2,33 +2,54 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>self catering options</title>
     <link rel="stylesheet" href="options.css">
     <script id="js-template-item-form" type="text/plain">
-      <li class="template-item">
-        <div class="buttons">
-          <button class="js-remove-button">remove</button>
-        </div>
-        <div class="inputs">
-          <label>name<input class="js-name" /></label><br />
-          <label>
-            template<br />
-            <textarea class="js-template"></textarea>
+      <li class="template-item item">
+        <div class="item__container item__editor">
+          <label class="item__label">
+            name<br />
+            <input class="js-name item__input" />
           </label>
+          <label class="item__label">
+            template<br />
+            <textarea class="js-template item__textarea"></textarea>
+          </label>
+        </div>
+        <div class="item__container item__control">
+          <button class="js-remove-button item__button" aria-label="remove template">&times;</button>
         </div>
       </li>
     </script>
     <script src="options.js"></script>
   </head>
-  <body>
+  <body class="option">
     <main class="main">
-      <section>
-        <div>
-          <button id="js-add-template-button">add template</button>
-          <button id="js-save-button">save</button>
+      <header class="header">
+        <h1 class="header__title">
+          <img class="header__icon" src="icon.svg" alt="">self catering options
+        </h1>
+      </header>
+      <div class="control">
+        <button id="js-add-template-button" class="control__button">add template</button>
+        <button id="js-save-templates-button" class="control__button">save templates</button>
+        <button id="js-reset-templates-button" class="control__button">reset templates</button>
+      </div>
+      <details class="playground">
+        <summary class="playground__summary">playground</summary>
+        <div class="playground__content">
+          <label class="playground__label">
+            template<br />
+            <textarea id="js-playground-template" class="playground__textarea"></textarea>
+          </label>
+          <label class="playground__label">
+            preview<br />
+            <textarea id="js-playground-preview" class="playground__textarea" readonly></textarea>
+          </label>
         </div>
-        <ul id="js-template-list" class="template-list"></ul>
-      </section>
+      </details>
+      <ul id="js-template-list" class="template-list"></ul>
     </main>
   </body>
 </html>

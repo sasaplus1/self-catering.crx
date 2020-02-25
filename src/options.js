@@ -1,12 +1,80 @@
-import { getConfig, getDigest, setConfig } from './logic';
+import {
+  detachChildren,
+  getConfig,
+  getDefaultTemplates,
+  getDigest,
+  renderTemplate,
+  setConfig
+} from './utils';
 
 const store = {};
 
-function onClickAdd() {
+//------------------------------------------------------------------------------
+
+async function restoreTemplates(templates) {
+  const parser = new DOMParser();
+  const templateElement = document.getElementById('js-template-item-form');
+  const templateMarkup = templateElement.innerText.trim().replace(/\n\s+/g, '');
+
+  const doc = parser.parseFromString(templateMarkup, 'text/html');
+  const templateItem = doc.body.firstElementChild;
+
+  const templateItems = templates.map(function({ name, template }) {
+    const element = templateItem.cloneNode(true);
+
+    element.querySelector('.js-name').value = name;
+    element.querySelector('.js-template').value = template;
+
+    return element;
+  });
+
+  const fragment = document.createDocumentFragment();
+
+  for (const i of templateItems) {
+    fragment.appendChild(i);
+  }
+
+  const list = document.getElementById('js-template-list');
+
+  detachChildren(list);
+
+  list.appendChild(fragment);
+}
+
+async function updatePlayground() {
+  const playgroundTextArea = document.getElementById('js-playground-template');
+  const previewTextArea = document.getElementById('js-playground-preview');
+
+  if (!playgroundTextArea || !previewTextArea) {
+    return;
+  }
+
+  const template = playgroundTextArea.value;
+
+  previewTextArea.value = await renderTemplate(template, [
+    {
+      url: 'https://www.google.com',
+      title: 'Google'
+    },
+    {
+      url: 'https://www.youtube.com',
+      title: 'YouTube'
+    },
+    {
+      url:
+        'https://user@pass:example.com:8080/p/a/t/h/?query=string&query=string#hash',
+      title: 'Example'
+    }
+  ]);
+}
+
+//------------------------------------------------------------------------------
+
+function onClickAddTemplate() {
   const templateList = document.getElementById('js-template-list');
 
   const templateElement = document.getElementById('js-template-item-form');
-  const templateMarkup = templateElement.innerText;
+  const templateMarkup = templateElement.innerText.trim().replace(/\n\s+/g, '');
 
   templateList.insertAdjacentHTML('beforeend', templateMarkup);
 }
@@ -26,7 +94,19 @@ async function onClickRemove(event) {
   templateItem.parentElement.removeChild(templateItem);
 }
 
-async function onClickSave() {
+function onClickResetTemplates() {
+  if (!window.confirm('Do you really reset templates?')) {
+    return;
+  }
+
+  Object.assign(store, { templates: getDefaultTemplates() });
+
+  const { templates } = store;
+
+  restoreTemplates(templates);
+}
+
+async function onClickSaveTemplates() {
   const templateList = document.getElementById('js-template-list');
   const templateItems = templateList.getElementsByTagName('li');
 
@@ -45,7 +125,29 @@ async function onClickSave() {
     });
   }
 
-  await setConfig({ templates: Array.from(set) });
+  const templates = Array.from(set);
+
+  await setConfig({ templates });
+
+  await chrome.contextMenus.removeAll(function() {
+    return Promise.resolve();
+  });
+
+  const contexts = ['page_action'];
+
+  for (const template of templates) {
+    const { name: title, hash: id } = template;
+
+    chrome.contextMenus.create({
+      id,
+      title,
+      contexts
+    });
+  }
+}
+
+function onInputPlayground() {
+  updatePlayground();
 }
 
 async function onDOMContentLoaded() {
@@ -53,18 +155,45 @@ async function onDOMContentLoaded() {
 
   //----------------------------------------------------------------------------
 
-  const addButton = document.getElementById('js-add-template-button');
+  const addTemplateButton = document.getElementById('js-add-template-button');
 
-  if (addButton) {
-    addButton.addEventListener('click', onClickAdd, false);
+  if (addTemplateButton) {
+    addTemplateButton.addEventListener('click', onClickAddTemplate, false);
   }
 
   //----------------------------------------------------------------------------
 
-  const saveButton = document.getElementById('js-save-button');
+  const saveTemplatesButton = document.getElementById(
+    'js-save-templates-button'
+  );
 
-  if (saveButton) {
-    saveButton.addEventListener('click', onClickSave, false);
+  if (saveTemplatesButton) {
+    saveTemplatesButton.addEventListener('click', onClickSaveTemplates, false);
+  }
+
+  //----------------------------------------------------------------------------
+
+  const resetTemplatesButton = document.getElementById(
+    'js-reset-templates-button'
+  );
+
+  if (resetTemplatesButton) {
+    resetTemplatesButton.addEventListener(
+      'click',
+      onClickResetTemplates,
+      false
+    );
+  }
+
+  //----------------------------------------------------------------------------
+
+  const playgroundTextArea = document.getElementById('js-playground-template');
+
+  if (playgroundTextArea) {
+    playgroundTextArea.value = '{{{ title }}}\n{{{ url }}}\n\n';
+    playgroundTextArea.addEventListener('input', onInputPlayground, false);
+
+    updatePlayground();
   }
 
   //----------------------------------------------------------------------------
@@ -73,31 +202,9 @@ async function onDOMContentLoaded() {
 
   Object.assign(store, { ...data });
 
-  const parser = new DOMParser();
-  const templateElement = document.getElementById('js-template-item-form');
-  const templateMarkup = templateElement.innerText.trim().replace(/\n\s+/g, '');
+  const { templates } = store;
 
-  const doc = parser.parseFromString(templateMarkup, 'text/html');
-  const templateItem = doc.body.firstElementChild;
-
-  const templateItems = data.templates.map(function({ name, template }) {
-    const element = templateItem.cloneNode(true);
-
-    element.querySelector('.js-name').value = name;
-    element.querySelector('.js-template').value = template;
-
-    return element;
-  });
-
-  const fragment = document.createDocumentFragment();
-
-  for (const i of templateItems) {
-    fragment.appendChild(i);
-  }
-
-  const list = document.getElementById('js-template-list');
-
-  list.appendChild(fragment);
+  restoreTemplates(templates);
 }
 
 document.addEventListener('DOMContentLoaded', onDOMContentLoaded, false);

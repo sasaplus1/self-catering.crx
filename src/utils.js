@@ -17,6 +17,18 @@ export function copyToClipboard(value) {
   document.body.removeChild(textarea);
 }
 
+/**
+ * @param {HTMLElement} parentElement
+ * @return {DocumentFragment}
+ */
+export function detachChildren(parentElement) {
+  const range = document.createRange();
+
+  range.selectNodeContents(parentElement);
+
+  return range.extractContents();
+}
+
 export function getConfig() {
   return new Promise(function(resolve) {
     chrome.storage.local.get(name, function(data) {
