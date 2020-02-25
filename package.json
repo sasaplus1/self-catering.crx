@@ -12,6 +12,7 @@
     "husky": "^4.2.3",
     "imagemin-cli": "^5.1.0",
     "imagemin-pngquant": "^8.0.0",
+    "imagemin-svgo": "^7.1.0",
     "lint-staged": "^10.0.7",
     "npm-run-all": "^4.1.5",
     "onchange": "^6.1.0",
@@ -30,6 +31,7 @@
     "build:js": "rollup -c",
     "build:json": "node -p 'JSON.stringify(require(`./src/manifest`), null, 2)' > ./lib/manifest.json",
     "build:png": "imagemin --out-dir=./lib --plugin=pngquant ./src/*.png",
+    "build:svg": "imagemin --out-dir=./lib --plugin=svgo ./src/*.svg",
     "fix": "run-s fix:*",
     "fix:css": "stylelint --cache --fix ./src/**/*.css",
     "fix:js": "eslint --cache --fix .",
@@ -42,6 +44,7 @@
     "watch:html": "onchange -v 'src/*.html' -- run-s build:html",
     "watch:js": "onchange -v 'src/*.js' -- run-s build:js",
     "watch:json": "onchange -v 'src/manifest.js' -- run-s build:json",
-    "watch:png": "onchange -v 'src/*.png' -- run-s build:png"
+    "watch:png": "onchange -v 'src/*.png' -- run-s build:png",
+    "watch:svg": "onchange -v 'src/*.svg' -- run-s build:svg"
   }
 }
