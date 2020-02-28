@@ -45,6 +45,7 @@
  */
 
 .control {
+  display: flex;
   margin-top: 40px;
 }
 
@@ -65,6 +66,10 @@
 
 .control__button:focus {
   box-shadow: 0 0 0 2px #99f;
+}
+
+.control__add-template {
+  margin-right: auto;
 }
 
 /**
@@ -89,6 +94,22 @@
 
 .playground__summary:focus {
   box-shadow: 0 0 0 2px #99f;
+}
+
+.playground__link {
+  border-radius: 3px;
+  color: #66f;
+  display: inline-block;
+  margin: 16px 0;
+  outline: 0;
+}
+
+.playground__link:focus {
+  box-shadow: 0 0 0 2px #99f;
+}
+
+.playground__link:hover {
+  text-decoration: none;
 }
 
 .playground__content {
