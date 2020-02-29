@@ -2,7 +2,7 @@ module.exports = {
   manifest_version: 2,
   name: 'self catering',
   version: '0.0.0',
-  description: '',
+  description: 'copy selected tabs data to clipboard',
   icons: {
     '16': 'icon_16.png',
     '32': 'icon_32.png',
