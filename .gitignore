@@ -110,10 +110,9 @@ dist
 
 ### self-catering.crx
 
-.stylelintcache
+self-catering.zip
 
-crx/*
-!crx/.gitkeep
+.stylelintcache
 
 lib/*
 !lib/.gitkeep

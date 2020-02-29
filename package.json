@@ -39,6 +39,7 @@
     "lint": "run-s lint:*",
     "lint:css": "stylelint --cache ./src/**/*.css",
     "lint:js": "eslint --cache .",
+    "release": "zip -j ./self-catering.zip ./lib/*",
     "watch": "run-p -l watch:*",
     "watch:css": "onchange -v 'src/*.css' -- run-s build:css",
     "watch:html": "onchange -v 'src/*.html' -- run-s build:html",
