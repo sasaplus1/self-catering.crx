@@ -144,6 +144,26 @@ async function onClickSaveTemplates() {
       contexts
     });
   }
+
+  const savedToast = document.getElementById('js-toast-save');
+
+  if (!savedToast) {
+    return;
+  }
+
+  savedToast.addEventListener(
+    'animationend',
+    function(event) {
+      const toast = event.target;
+
+      toast.classList.remove('saved');
+      toast.removeAttribute('aria-live');
+    },
+    { capture: false, once: true, passive: true }
+  );
+
+  savedToast.classList.add('saved');
+  savedToast.setAttribute('aria-live', 'polite');
 }
 
 function onInputPlayground() {

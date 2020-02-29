@@ -247,3 +247,48 @@
 .item__button:focus {
   box-shadow: 0 0 0 2px #99f;
 }
+
+/**
+ * toast
+ */
+
+.toast-save {
+  background-color: white;
+  border-radius: 0 0 3px 3px;
+  border: 1px solid #999;
+  border-top: none;
+  box-sizing: border-box;
+  display: inline-block;
+  left: 50%;
+  padding: 4px 0;
+  position: fixed;
+  text-align: center;
+
+  /* font height and padding * 2 */
+  top: calc(-1rem - 4px * 2);
+  transform: translateX(-50%);
+  width: 80px;
+  visibility: hidden;
+}
+
+.toast-save.saved {
+  animation: toast 3s ease 0s;
+  animation-fill-mode: both;
+  visibility: visible;
+  will-change: top;
+}
+
+@keyframes toast {
+  0% {
+    top: calc(-1rem - 4px * 2);
+  }
+  20% {
+    top: 0;
+  }
+  80% {
+    top: 0;
+  }
+  100% {
+    top: calc(-1rem - 4px * 2);
+  }
+}
