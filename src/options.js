@@ -171,14 +171,20 @@ function onInputPlayground() {
 }
 
 async function onDOMContentLoaded() {
-  document.addEventListener('click', onClickRemove, false);
+  document.addEventListener('click', onClickRemove, {
+    capture: false,
+    passive: true
+  });
 
   //----------------------------------------------------------------------------
 
   const addTemplateButton = document.getElementById('js-add-template-button');
 
   if (addTemplateButton) {
-    addTemplateButton.addEventListener('click', onClickAddTemplate, false);
+    addTemplateButton.addEventListener('click', onClickAddTemplate, {
+      capture: false,
+      passive: true
+    });
   }
 
   //----------------------------------------------------------------------------
@@ -188,7 +194,10 @@ async function onDOMContentLoaded() {
   );
 
   if (saveTemplatesButton) {
-    saveTemplatesButton.addEventListener('click', onClickSaveTemplates, false);
+    saveTemplatesButton.addEventListener('click', onClickSaveTemplates, {
+      capture: false,
+      passive: true
+    });
   }
 
   //----------------------------------------------------------------------------
@@ -198,11 +207,10 @@ async function onDOMContentLoaded() {
   );
 
   if (resetTemplatesButton) {
-    resetTemplatesButton.addEventListener(
-      'click',
-      onClickResetTemplates,
-      false
-    );
+    resetTemplatesButton.addEventListener('click', onClickResetTemplates, {
+      capture: false,
+      passive: true
+    });
   }
 
   //----------------------------------------------------------------------------
@@ -211,7 +219,10 @@ async function onDOMContentLoaded() {
 
   if (playgroundTextArea) {
     playgroundTextArea.value = '{{{ title }}}\n{{{ url }}}\n\n';
-    playgroundTextArea.addEventListener('input', onInputPlayground, false);
+    playgroundTextArea.addEventListener('input', onInputPlayground, {
+      capture: false,
+      passive: true
+    });
 
     updatePlayground();
   }
@@ -227,4 +238,7 @@ async function onDOMContentLoaded() {
   restoreTemplates(templates);
 }
 
-document.addEventListener('DOMContentLoaded', onDOMContentLoaded, false);
+document.addEventListener('DOMContentLoaded', onDOMContentLoaded, {
+  capture: false,
+  passive: true
+});
