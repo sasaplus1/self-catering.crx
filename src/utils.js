@@ -41,12 +41,12 @@ export function getDefaultTemplates() {
   return [
     {
       name: 'copy title and URL',
-      template: '{{ title }}\n{{{ url }}}\n',
+      template: '{{{ title }}}\n{{{ url }}}\n\n',
       hash: 'default item 1'
     },
     {
       name: 'copy as Markdown list',
-      template: '- [{{ title }}]({{{ url }}})\n',
+      template: '- [{{{ title }}}]({{{ url }}})\n',
       hash: 'default item 2'
     }
   ];
