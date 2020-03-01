@@ -13,6 +13,8 @@ jobs:
         node:
           - 12
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - run: sudo apt update --yes
       - run: sudo apt install --yes xvfb
@@ -43,7 +45,20 @@ jobs:
         with:
           name: self-catering.crx
           path: self-catering.crx
-      - uses: actions/create-release@v1.0.0
+      - id: create_release
+        uses: actions/create-release@v1.0.0
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
           release_name: ${{ steps.get_version.outputs.version }}
+      - uses: actions/upload-release-asset@v1.0.1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: self-catering.zip
+          asset_name: self-catering.zip
+          asset_content_type: application/zip
+      - uses: actions/upload-release-asset@v1.0.1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: self-catering.crx
+          asset_name: self-catering.crx
+          asset_content_type: application/zip
