@@ -1,0 +1,47 @@
+name: build
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build:
+    name: build crx and zip
+    strategy:
+      matrix:
+        node:
+          - 12
+    runs-on: ubuntu-latest
+    steps:
+      - id: get_version
+        run: echo "::set-output name=version::${GITHUB_REF/refs\/tags\//}"
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --frozen-lockfile
+      - run: yarn run build
+      - run: yarn run release
+      - uses: actions/upload-artifact@master
+        with:
+          name: self-catering.zip
+          path: self-catering.zip
+      - run: google-chrome --pack-extension=./lib
+      - run: mv lib.crx self-catering.crx
+      - uses: actions/upload-artifact@master
+        with:
+          name: self-catering.crx
+          path: self-catering.crx
+      - uses: actions/create-release@v1.0.0
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: ${{ steps.get_version.outputs.version }}
