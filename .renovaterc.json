@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "config:base",
+    ":automergeAll",
+    ":label(renovate)",
+    ":assignee(sasaplus1)",
+    ":timezone(Asia/Tokyo)"
+  ]
+}
