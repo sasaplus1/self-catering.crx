@@ -14,6 +14,8 @@ jobs:
           - 12
     runs-on: ubuntu-latest
     steps:
+      - run: sudo apt update --yes
+      - run: sudo apt install --yes xvfb
       - id: get_version
         run: echo "::set-output name=version::${GITHUB_REF/refs\/tags\//}"
       - uses: actions/checkout@v2
@@ -35,7 +37,7 @@ jobs:
         with:
           name: self-catering.zip
           path: self-catering.zip
-      - run: google-chrome --headless --pack-extension=./lib
+      - run: xvfb-run --auto-servernum google-chrome --pack-extension=./lib
       - run: mv lib.crx self-catering.crx
       - uses: actions/upload-artifact@master
         with:
