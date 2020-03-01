@@ -35,7 +35,7 @@ jobs:
         with:
           name: self-catering.zip
           path: self-catering.zip
-      - run: google-chrome --pack-extension=./lib
+      - run: google-chrome --headless --pack-extension=./lib
       - run: mv lib.crx self-catering.crx
       - uses: actions/upload-artifact@master
         with:
