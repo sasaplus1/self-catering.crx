@@ -231,7 +231,7 @@ async function onDOMContentLoaded() {
 
   const data = await getConfig();
 
-  Object.assign(store, { ...data });
+  Object.assign(store, { templates: getDefaultTemplates() }, { ...data });
 
   const { templates } = store;
 
