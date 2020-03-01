@@ -1,4 +1,4 @@
-name: build
+name: release
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - '*.*.*'
 
 jobs:
-  build:
+  release:
     name: build crx and zip
     strategy:
       matrix:
