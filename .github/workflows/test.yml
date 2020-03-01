@@ -28,3 +28,14 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn run lint
       - run: yarn run build
+      - run: yarn run release
+      - uses: actions/upload-artifact@master
+        with:
+          name: self-catering.zip
+          path: self-catering.zip
+      - run: google-chrome --pack-extension=./lib
+      - run: mv lib.crx self-catering.crx
+      - uses: actions/upload-artifact@master
+        with:
+          name: self-catering.crx
+          path: self-catering.crx
