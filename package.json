@@ -34,7 +34,7 @@
     "build:svg": "imagemin --out-dir=./lib --plugin=svgo ./src/*.svg",
     "fix": "run-s fix:*",
     "fix:css": "stylelint --cache --fix ./src/**/*.css",
-    "fix:js": "eslint --cache --fix .",
+    "fix:js": "eslint --fix .",
     "fixpack": "npx fixpack",
     "lint": "run-s lint:*",
     "lint:css": "stylelint --cache ./src/**/*.css",
