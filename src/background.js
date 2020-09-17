@@ -20,7 +20,7 @@ async function getTemplates() {
  * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
  */
 async function onInstalled() {
-  const contexts = ['page_action'];
+  const contexts = [/*'tools_menu',*/ 'page_action'];
 
   const templates = await getTemplates();
 
@@ -28,6 +28,7 @@ async function onInstalled() {
     const { name: title, hash: id } = template;
 
     chrome.contextMenus.create({
+      // browser.menu.create({
       id,
       title,
       contexts
@@ -61,3 +62,7 @@ async function onClicked(info) {
 
 chrome.contextMenus.onClicked.addListener(onClicked);
 chrome.runtime.onInstalled.addListener(onInstalled);
+
+// chrome.browserAction.onClicked.addListener(function() {
+//   chrome.browserAction.openPopup && chrome.browserAction.openPopup();
+// });
