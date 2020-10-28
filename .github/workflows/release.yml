@@ -46,7 +46,7 @@ jobs:
           name: self-catering.crx
           path: self-catering.crx
       - id: create_release
-        uses: actions/create-release@v1.0.0
+        uses: actions/create-release@v1.1.4
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
           release_name: ${{ steps.get_version.outputs.version }}
