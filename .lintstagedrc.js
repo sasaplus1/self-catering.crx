@@ -1,5 +1,5 @@
 module.exports = {
-  '*.css': 'npx stylelint --cache',
+  '*.css': ['npx stylelint --cache', 'npx prettier --check'],
   '*.js': ['npx eslint --cache', 'npx prettier --check'],
   '*.yml': [
     'npx prettier --parser yaml --write',
