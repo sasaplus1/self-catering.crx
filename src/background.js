@@ -20,7 +20,7 @@ async function getTemplates() {
  * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
  */
 async function onInstalled() {
-  const contexts = [/*'tools_menu',*/ 'page_action'];
+  const contexts = ['all', 'page_action'];
 
   const templates = await getTemplates();
 
