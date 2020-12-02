@@ -30,8 +30,8 @@ export function detachChildren(parentElement) {
 }
 
 export function getConfig() {
-  return new Promise(function(resolve) {
-    chrome.storage.local.get(name, function(data) {
+  return new Promise(function (resolve) {
+    chrome.storage.local.get(name, function (data) {
       resolve(data[name]);
     });
   });
@@ -60,15 +60,15 @@ export async function getDigest(message) {
   const hashBuffer = await crypto.subtle.digest('SHA-256', uint8Message);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
 
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 export function getSelectedTabs() {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     // NOTE: copy PWA window if currentWindow is false
     const query = { currentWindow: true, highlighted: true };
 
-    chrome.tabs.query(query, function(tabs) {
+    chrome.tabs.query(query, function (tabs) {
       const set = new Set();
 
       for (const tab of tabs) {
@@ -102,7 +102,7 @@ export async function renderTemplate(template, data) {
  * @param {Object} config
  */
 export function setConfig(config) {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     chrome.storage.local.set({ [name]: config }, resolve);
   });
 }
