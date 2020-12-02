@@ -19,8 +19,7 @@
     "rollup": "^2.34.0",
     "stylelint": "^13.2.0",
     "stylelint-config-prettier": "^8.0.1",
-    "stylelint-config-standard": "^20.0.0",
-    "stylelint-prettier": "^1.1.2"
+    "stylelint-config-standard": "^20.0.0"
   },
   "private": true,
   "scripts": {
