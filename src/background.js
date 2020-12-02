@@ -48,7 +48,7 @@ async function onClicked(info) {
 
   const templates = await getTemplates();
 
-  const template = templates.find(template => template.hash === hash);
+  const template = templates.find((template) => template.hash === hash);
 
   if (!template) {
     return;

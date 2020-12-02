@@ -19,7 +19,7 @@ async function restoreTemplates(templates) {
   const doc = parser.parseFromString(templateMarkup, 'text/html');
   const templateItem = doc.body.firstElementChild;
 
-  const templateItems = templates.map(function({ name, template }) {
+  const templateItems = templates.map(function ({ name, template }) {
     const element = templateItem.cloneNode(true);
 
     element.querySelector('.js-name').value = name;
@@ -129,7 +129,7 @@ async function onClickSaveTemplates() {
 
   await setConfig({ templates });
 
-  await chrome.contextMenus.removeAll(function() {
+  await chrome.contextMenus.removeAll(function () {
     return Promise.resolve();
   });
 
@@ -153,7 +153,7 @@ async function onClickSaveTemplates() {
 
   savedToast.addEventListener(
     'animationend',
-    function(event) {
+    function (event) {
       const toast = event.target;
 
       toast.classList.remove('saved');
