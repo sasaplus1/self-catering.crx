@@ -2,11 +2,7 @@ module.exports = {
   env: {
     es6: true
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:node/recommended-script',
-    'plugin:prettier/recommended'
-  ],
+  extends: ['eslint:recommended', 'plugin:node/recommended-script'],
   overrides: [
     {
       files: ['rollup.config.js'],
