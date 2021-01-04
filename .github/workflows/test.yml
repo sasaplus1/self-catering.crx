@@ -16,7 +16,7 @@ jobs:
       - run: sudo apt update --yes
       - run: sudo apt install --yes xvfb
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
       - id: yarn-cache
