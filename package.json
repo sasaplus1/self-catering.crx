@@ -6,7 +6,7 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "eslint": "^7.0.0",
-    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-node": "^11.0.0",
     "husky": "^4.2.3",
     "imagemin-cli": "^6.0.0",
