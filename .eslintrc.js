@@ -5,27 +5,40 @@ module.exports = {
   extends: ['eslint:recommended', 'plugin:node/recommended-script', 'prettier'],
   overrides: [
     {
-      files: ['rollup.config.js'],
-      rules: {
-        'node/no-unpublished-import': 'off',
-        'node/no-unsupported-features/es-syntax': 'off'
-      }
+      extends: [
+        'eslint:recommended',
+        'plugin:node/recommended-module',
+        'prettier'
+      ],
+      files: ['rollup.config.js']
     },
     {
+      env: {
+        node: true
+      },
+      files: ['src/manifest.js']
+    },
+    {
+      extends: [
+        'eslint:recommended',
+        'plugin:node/recommended-module',
+        'prettier'
+      ],
       env: {
         browser: true,
         webextensions: true
       },
-      files: ['src/**/*.js'],
-      rules: {
-        'node/no-unsupported-features/es-syntax': 'off',
-        'node/no-unsupported-features/node-builtins': 'off'
-      }
+      files: ['src/**/!(manifest)*.js']
     }
   ],
   parserOptions: {
     ecmaVersion: 2019,
     sourceType: 'module'
   },
-  root: true
+  root: true,
+  settings: {
+    node: {
+      allowModules: ['@rollup/plugin-commonjs', '@rollup/plugin-node-resolve']
+    }
+  }
 };
