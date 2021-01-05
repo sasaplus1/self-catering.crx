@@ -1,25 +1,26 @@
 import commonJs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
 
 export default [
   {
-    input: './src/background.js',
+    input: './src/background.ts',
     output: {
       file: './lib/background.js',
       format: 'iife',
-      name: 'popup',
+      name: 'background',
       sourcemap: true
     },
-    plugins: [nodeResolve(), commonJs()]
+    plugins: [typescript(), nodeResolve(), commonJs()]
   },
   {
-    input: './src/options.js',
+    input: './src/options.ts',
     output: {
       file: './lib/options.js',
       format: 'iife',
-      name: 'popup',
+      name: 'options',
       sourcemap: true
     },
-    plugins: [nodeResolve(), commonJs()]
+    plugins: [typescript(), nodeResolve(), commonJs()]
   }
 ];
