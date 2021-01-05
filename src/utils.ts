@@ -1,11 +1,12 @@
+import { browser as chrome } from 'webextension-polyfill-ts';
+
 import mustache from 'mustache';
 
-import { name } from './manifest';
+const name = 'self catering';
 
 /**
- * @param {string} value
  */
-export function copyToClipboard(value) {
+export function copyToClipboard(value: string): void {
   const textarea = document.createElement('textarea');
 
   document.body.appendChild(textarea);
@@ -18,10 +19,8 @@ export function copyToClipboard(value) {
 }
 
 /**
- * @param {HTMLElement} parentElement
- * @return {DocumentFragment}
  */
-export function detachChildren(parentElement) {
+export function detachChildren(parentElement: HTMLElement): DocumentFragment {
   const range = document.createRange();
 
   range.selectNodeContents(parentElement);
@@ -29,15 +28,21 @@ export function detachChildren(parentElement) {
   return range.extractContents();
 }
 
-export function getConfig() {
-  return new Promise(function (resolve) {
-    chrome.storage.local.get(name, function (data) {
-      resolve(data[name]);
-    });
-  });
+/**
+ */
+export async function getConfig(): Promise<Record<string, unknown>> {
+  const data = await chrome.storage.local.get(name);
+
+  return data[name];
 }
 
-export function getDefaultTemplates() {
+/**
+ */
+export function getDefaultTemplates(): {
+  name: string;
+  template: string;
+  hash: string;
+}[] {
   return [
     {
       name: 'copy title and URL',
@@ -55,7 +60,7 @@ export function getDefaultTemplates() {
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
  */
-export async function getDigest(message) {
+export async function getDigest(message: string): Promise<string> {
   const uint8Message = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', uint8Message);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -63,46 +68,47 @@ export async function getDigest(message) {
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-export function getSelectedTabs() {
-  return new Promise(function (resolve) {
-    // NOTE: copy PWA window if currentWindow is false
-    const query = { currentWindow: true, highlighted: true };
+export async function getSelectedTabs(): Promise<
+  Pick<chrome.tabs.Tab, 'favIconUrl' | 'status' | 'title' | 'url'>[]
+> {
+  // NOTE: copy PWA window if currentWindow is false
+  const query = { currentWindow: true, highlighted: true };
 
-    chrome.tabs.query(query, function (tabs) {
-      const set = new Set();
+  const tabs = await chrome.tabs.query(query);
 
-      for (const tab of tabs) {
-        const { favIconUrl, pendingUrl, status, title, url } = tab;
+  const sets = new Set<
+    Pick<chrome.tabs.Tab, 'favIconUrl' | 'status' | 'title' | 'url'>
+  >();
 
-        set.add({
-          favIconUrl,
-          pendingUrl,
-          status,
-          title,
-          url
-        });
-      }
+  for (const tab of tabs) {
+    const { favIconUrl, status, title, url } = tab;
 
-      resolve(Array.from(set));
+    sets.add({
+      favIconUrl,
+      status,
+      title,
+      url
     });
+  }
+
+  return Array.from(sets);
+}
+
+/**
+ */
+export async function renderTemplate(
+  template: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: Record<string, any>
+): Promise<string> {
+  return mustache.render(`{{#view}}${template}{{/view}}`, {
+    view: data || (await getSelectedTabs())
   });
 }
 
 /**
- * @param {string} template
- * @param {Object} data
  */
-export async function renderTemplate(template, data) {
-  const view = data || (await getSelectedTabs());
-
-  return mustache.render(`{{#view}}${template}{{/view}}`, { view });
-}
-
-/**
- * @param {Object} config
- */
-export function setConfig(config) {
-  return new Promise(function (resolve) {
-    chrome.storage.local.set({ [name]: config }, resolve);
-  });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function setConfig(config: Record<string, any>): Promise<void> {
+  return chrome.storage.local.set({ [name]: config });
 }
