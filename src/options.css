@@ -41,15 +41,15 @@
 }
 
 /**
- * control
+ * controls
  */
 
-.control {
+.controls {
   display: flex;
   margin-top: 40px;
 }
 
-.control__button {
+.controls__button {
   background-color: #eee;
   border-radius: 3px;
   border: none;
@@ -60,15 +60,15 @@
   padding: 4px 8px;
 }
 
-.control__button:first-child {
+.controls__button:first-child {
   margin-left: 0;
 }
 
-.control__button:focus {
+.controls__button:focus {
   box-shadow: 0 0 0 2px #99f;
 }
 
-.control__add-template {
+.controls__add-template {
   margin-right: auto;
 }
 
