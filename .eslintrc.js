@@ -21,6 +21,21 @@ module.exports = {
     {
       extends: [
         'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:node/recommended-module',
+        'prettier/@typescript-eslint'
+      ],
+      env: {
+        browser: true,
+        webextensions: true
+      },
+      files: ['src/**/*.{ts,tsx}'],
+      parser: '@typescript-eslint/parser'
+    },
+    {
+      extends: [
+        'eslint:recommended',
         'plugin:node/recommended-module',
         'prettier'
       ],
@@ -38,7 +53,8 @@ module.exports = {
   root: true,
   settings: {
     node: {
-      allowModules: ['@rollup/plugin-commonjs', '@rollup/plugin-node-resolve']
+      allowModules: ['@rollup/plugin-commonjs', '@rollup/plugin-node-resolve'],
+      tryExtensions: ['.tsx', '.ts', '.jsx', '.js', '.json', '.node']
     }
   }
 };
