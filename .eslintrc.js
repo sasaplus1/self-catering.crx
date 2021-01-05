@@ -2,7 +2,12 @@ module.exports = {
   env: {
     es6: true
   },
-  extends: ['eslint:recommended', 'plugin:node/recommended-script', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:node/recommended-script',
+    'plugin:react/recommended',
+    'prettier'
+  ],
   overrides: [
     {
       extends: [
@@ -24,6 +29,7 @@ module.exports = {
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:node/recommended-module',
+        'plugin:react/recommended',
         'prettier/@typescript-eslint'
       ],
       env: {
@@ -56,9 +62,14 @@ module.exports = {
       allowModules: [
         '@rollup/plugin-commonjs',
         '@rollup/plugin-node-resolve',
-        '@rollup/plugin-typescript'
+        '@rollup/plugin-typescript',
+        'preact'
       ],
       tryExtensions: ['.tsx', '.ts', '.jsx', '.js', '.json', '.node']
+    },
+    react: {
+      pragma: 'h',
+      version: 'detect'
     }
   }
 };

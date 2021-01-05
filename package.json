@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "mustache": "^4.0.0",
+    "preact": "^10.5.9",
+    "redux": "^4.0.5",
     "webextension-polyfill-ts": "^0.22.0"
   },
   "devDependencies": {
@@ -16,6 +18,7 @@
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-react": "^7.22.0",
     "husky": "^4.2.3",
     "imagemin-cli": "^6.0.0",
     "imagemin-pngquant": "^9.0.0",
@@ -48,8 +51,8 @@
     "fix:css:prettier": "prettier --ignore-path .stylelintignore --write '**/*.css'",
     "fix:css:stylelint": "stylelint --cache --fix ./src/**/*.css",
     "fix:js": "run-s fix:js:eslint fix:js:prettier",
-    "fix:js:eslint": "eslint --ext .js,.ts, --fix .",
-    "fix:js:prettier": "prettier --ignore-path .eslintignore --write '**/*.{js,ts}'",
+    "fix:js:eslint": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "fix:js:prettier": "prettier --ignore-path .eslintignore --write '**/*.{js,jsx,ts,tsx}'",
     "fixpack": "npx fixpack",
     "lint": "run-s lint:*",
     "lint:css": "run-s lint:css:stylelint lint:css:prettier",
@@ -57,7 +60,7 @@
     "lint:css:stylelint": "stylelint --cache ./src/**/*.css",
     "lint:js": "run-s lint:js:eslint lint:js:prettier",
     "lint:js:eslint": "eslint --cache .",
-    "lint:js:prettier": "prettier --check --ignore-path .eslintignore '**/*.{js,ts}'",
+    "lint:js:prettier": "prettier --check --ignore-path .eslintignore '**/*.{js,jsx,ts,tsx}'",
     "release": "zip -j ./self-catering.zip ./lib/*",
     "watch": "run-p -l watch:*",
     "watch:css": "onchange -v 'src/*.css' -- run-s build:css",
@@ -65,6 +68,6 @@
     "watch:json": "onchange -v 'src/manifest.js' -- run-s build:json",
     "watch:png": "onchange -v 'src/*.png' -- run-s build:png",
     "watch:svg": "onchange -v 'src/*.svg' -- run-s build:svg",
-    "watch:ts": "onchange -v 'src/*.ts' -- run-s build:ts"
+    "watch:ts": "onchange -v 'src/*.{ts,tsx}' -- run-s build:ts"
   }
 }
