@@ -53,7 +53,11 @@ module.exports = {
   root: true,
   settings: {
     node: {
-      allowModules: ['@rollup/plugin-commonjs', '@rollup/plugin-node-resolve'],
+      allowModules: [
+        '@rollup/plugin-commonjs',
+        '@rollup/plugin-node-resolve',
+        '@rollup/plugin-typescript'
+      ],
       tryExtensions: ['.tsx', '.ts', '.jsx', '.js', '.json', '.node']
     }
   }
