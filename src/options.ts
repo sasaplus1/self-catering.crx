@@ -1,3 +1,5 @@
+import { browser as chrome } from 'webextension-polyfill-ts';
+
 import {
   detachChildren,
   getConfig,
@@ -7,23 +9,55 @@ import {
   setConfig
 } from './utils';
 
-const store = {};
+import type { ContextMenus } from 'webextension-polyfill-ts';
+
+const store: { templates: ReturnType<typeof getDefaultTemplates> } = {
+  templates: []
+};
 
 //------------------------------------------------------------------------------
 
-async function restoreTemplates(templates) {
-  const parser = new DOMParser();
+async function restoreTemplates(
+  templates: ReturnType<typeof getDefaultTemplates>
+): Promise<void> {
   const templateElement = document.getElementById('js-template-item-form');
+
+  if (!templateElement) {
+    return;
+  }
+
   const templateMarkup = templateElement.innerText.trim().replace(/\n\s+/g, '');
 
+  const parser = new DOMParser();
   const doc = parser.parseFromString(templateMarkup, 'text/html');
   const templateItem = doc.body.firstElementChild;
+
+  if (!templateItem) {
+    return;
+  }
 
   const templateItems = templates.map(function ({ name, template }) {
     const element = templateItem.cloneNode(true);
 
-    element.querySelector('.js-name').value = name;
-    element.querySelector('.js-template').value = template;
+    if (!element) {
+      return;
+    }
+
+    const nameElement = (element as Element).querySelector(
+      '.js-name'
+    ) as HTMLInputElement;
+
+    if (nameElement) {
+      nameElement.value = name;
+    }
+
+    const templateElement = (element as Element).querySelector(
+      '.js-template'
+    ) as HTMLTextAreaElement;
+
+    if (templateElement) {
+      templateElement.value = template;
+    }
 
     return element;
   });
@@ -31,14 +65,19 @@ async function restoreTemplates(templates) {
   const fragment = document.createDocumentFragment();
 
   for (const i of templateItems) {
+    if (i === undefined) {
+      continue;
+    }
+
     fragment.appendChild(i);
   }
 
   const list = document.getElementById('js-template-list');
 
-  detachChildren(list);
-
-  list.appendChild(fragment);
+  if (list) {
+    detachChildren(list);
+    list.appendChild(fragment);
+  }
 }
 
 async function updatePlayground() {
@@ -49,38 +88,52 @@ async function updatePlayground() {
     return;
   }
 
-  const template = playgroundTextArea.value;
+  const template = (playgroundTextArea as HTMLTextAreaElement).value;
 
-  previewTextArea.value = await renderTemplate(template, [
-    {
-      url: 'https://www.google.com',
-      title: 'Google'
-    },
-    {
-      url: 'https://www.youtube.com',
-      title: 'YouTube'
-    },
-    {
-      url:
-        'https://user@pass:example.com:8080/p/a/t/h/?query=string&query=string#hash',
-      title: 'Example'
-    }
-  ]);
+  (previewTextArea as HTMLTextAreaElement).value = await renderTemplate(
+    template,
+    [
+      {
+        url: 'https://www.google.com',
+        title: 'Google'
+      },
+      {
+        url: 'https://www.youtube.com',
+        title: 'YouTube'
+      },
+      {
+        url:
+          'https://user@pass:example.com:8080/p/a/t/h/?query=string&query=string#hash',
+        title: 'Example'
+      }
+    ]
+  );
 }
 
 //------------------------------------------------------------------------------
 
-function onClickAddTemplate() {
+function onClickAddTemplate(): void {
   const templateList = document.getElementById('js-template-list');
 
   const templateElement = document.getElementById('js-template-item-form');
+
+  if (!templateElement) {
+    return;
+  }
+
   const templateMarkup = templateElement.innerText.trim().replace(/\n\s+/g, '');
 
-  templateList.insertAdjacentHTML('beforeend', templateMarkup);
+  if (templateList) {
+    templateList.insertAdjacentHTML('beforeend', templateMarkup);
+  }
 }
 
-async function onClickRemove(event) {
-  const removeButton = event.target;
+async function onClickRemove(event: MouseEvent): Promise<void> {
+  const removeButton = event.target as HTMLElement;
+
+  if (!removeButton) {
+    return;
+  }
 
   if (
     !/button/i.test(removeButton.tagName) ||
@@ -91,10 +144,12 @@ async function onClickRemove(event) {
 
   const templateItem = removeButton.closest('.template-item');
 
-  templateItem.parentElement.removeChild(templateItem);
+  if (templateItem && templateItem.parentElement) {
+    templateItem.parentElement.removeChild(templateItem);
+  }
 }
 
-function onClickResetTemplates() {
+function onClickResetTemplates(): void {
   if (!window.confirm('Do you really reset templates?')) {
     return;
   }
@@ -106,34 +161,50 @@ function onClickResetTemplates() {
   restoreTemplates(templates);
 }
 
-async function onClickSaveTemplates() {
+async function onClickSaveTemplates(): Promise<void> {
   const templateList = document.getElementById('js-template-list');
+
+  if (!templateList) {
+    return;
+  }
+
   const templateItems = templateList.getElementsByTagName('li');
 
-  const set = new Set();
+  const sets = new Set<ReturnType<typeof getDefaultTemplates>[0]>();
 
   for (const item of templateItems) {
-    const name = item.querySelector('.js-name').value;
-    const template = item.querySelector('.js-template').value;
+    const nameElement = item.querySelector('.js-name');
+
+    if (!nameElement) {
+      continue;
+    }
+
+    const name = (nameElement as HTMLInputElement).value;
+
+    const templateElement = item.querySelector('.js-template');
+
+    if (!templateElement) {
+      continue;
+    }
+
+    const template = (templateElement as HTMLTextAreaElement).value;
 
     const hash = await getDigest(String(Date.now()) + name + template);
 
-    set.add({
+    sets.add({
       hash,
       name,
       template
     });
   }
 
-  const templates = Array.from(set);
+  const templates = Array.from(sets);
 
   await setConfig({ templates });
 
-  await chrome.contextMenus.removeAll(function () {
-    return Promise.resolve();
-  });
+  await chrome.contextMenus.removeAll();
 
-  const contexts = ['page_action'];
+  const contexts: ContextMenus.ContextType[] = ['page_action'];
 
   for (const template of templates) {
     const { name: title, hash: id } = template;
@@ -156,8 +227,12 @@ async function onClickSaveTemplates() {
     function (event) {
       const toast = event.target;
 
-      toast.classList.remove('saved');
-      toast.removeAttribute('aria-live');
+      if (!toast) {
+        return;
+      }
+
+      (toast as HTMLDivElement).classList.remove('saved');
+      (toast as HTMLDivElement).removeAttribute('aria-live');
     },
     { capture: false, once: true, passive: true }
   );
@@ -218,7 +293,8 @@ async function onDOMContentLoaded() {
   const playgroundTextArea = document.getElementById('js-playground-template');
 
   if (playgroundTextArea) {
-    playgroundTextArea.value = '{{{ title }}}\n{{{ url }}}\n\n';
+    (playgroundTextArea as HTMLTextAreaElement).value =
+      '{{{ title }}}\n{{{ url }}}\n\n';
     playgroundTextArea.addEventListener('input', onInputPlayground, {
       capture: false,
       passive: true

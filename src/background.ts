@@ -5,7 +5,9 @@ import {
   renderTemplate
 } from './utils';
 
-async function getTemplates() {
+/**
+ */
+async function getTemplates(): Promise<ReturnType<typeof getDefaultTemplates>> {
   const { templates } = Object.assign(
     {
       templates: getDefaultTemplates()
@@ -19,7 +21,7 @@ async function getTemplates() {
 /**
  * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
  */
-async function onInstalled() {
+async function onInstalled(): Promise<void> {
   const contexts = ['page_action'];
 
   const templates = await getTemplates();
@@ -39,7 +41,7 @@ async function onInstalled() {
  * @param {Object} info
  * @see https://developer.chrome.com/extensions/contextMenus#event-onClicked
  */
-async function onClicked(info) {
+async function onClicked(info: chrome.contextMenus.OnClickData): Promise<void> {
   const { menuItemId: hash } = info;
 
   if (!hash) {
