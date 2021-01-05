@@ -29,6 +29,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: yarn install --frozen-lockfile
       - run: yarn run lint
+      - run: yarn run check-types
       - run: yarn run build
       - run: yarn run release
       - uses: actions/upload-artifact@master
