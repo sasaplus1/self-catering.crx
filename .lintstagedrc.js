@@ -1,6 +1,6 @@
 module.exports = {
   '*.css': ['npx stylelint --cache', 'npx prettier --check'],
-  '*.js': ['npx eslint --cache', 'npx prettier --check'],
+  '*.{js,jsx,ts,tsx}': ['npx eslint --cache', 'npx prettier --check'],
   '*.yml': 'npx prettier --check --parser yaml',
   'package.json': [
     'npx fixpack',
