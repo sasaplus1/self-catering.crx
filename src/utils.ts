@@ -5,6 +5,7 @@ import mustache from 'mustache';
 const name = 'self catering';
 
 /**
+ * TODO: change to use Clipboard API if Firefox supported it
  */
 export function copyToClipboard(value: string): void {
   const textarea = document.createElement('textarea');
