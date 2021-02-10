@@ -16,7 +16,7 @@
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-node": "^11.0.0",
-    "husky": "^4.2.3",
+    "husky": "^5.0.0",
     "imagemin-cli": "^6.0.0",
     "imagemin-pngquant": "^9.0.0",
     "imagemin-svgo": "^8.0.0",
