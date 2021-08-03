@@ -209,10 +209,10 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.1.1.tgz#3348564048e7a2d7398c935d466c0414ebb6a669"
   integrity sha512-Z6DoceYb/1xSg5+e+ZlPZ9v0N16ZvZ+wYMraFue4HYrE4ttONKtsvruIRf6t9TBR0YvSOfi1hUU0fJfBLCDYow==
 
-"@types/chrome@^0.0.152":
-  version "0.0.152"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.152.tgz#365ab9ed8f6e67af6a2281003e46a5cac6a917fb"
-  integrity sha512-QrdSrlqQW+vFFmYGK8ZsBmH9SpldWc59XwKbwnetRerJ0JvTG6JtafSPL6qQFYSPRSwMK7H1qbeT7HGly87zLw==
+"@types/chrome@^0.0.153":
+  version "0.0.153"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.153.tgz#6c3009eb7be1d0fbace82be159122fd99e4a6465"
+  integrity sha512-J8VrwjuJLh6BPmUTmZQd41zJJjVpRnnMZ/E9uHfQZ3RRAESVqYxin8YeCdZUak7+5dUI6wr8Sr6UfR3dehLIdQ==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
